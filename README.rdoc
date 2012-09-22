@@ -54,6 +54,8 @@ It's up to you to edit these and change the values into something meaningful:
 
   rake db:seed:dump MODEL=User NO_DATA=1 APPEND=true 
 
+If you have a lot of data, set MAX_COMBINED to a reasonable number of rows to combine in each create.
+
 Here is a full example using all of the options above:
 
   rake db:seed:dump MODELS=Category LIMIT=10 APPEND=true FILE=db/categories.rb WITH_ID=1 NO_DATA=1
@@ -93,6 +95,9 @@ WITHOUT_PROTECTION:
 
 MODEL_DIR:
  Specify an alternative model dir
+
+MAX_COMBINED:
+ Specify the number of rows to put in each create statement
 
 
 Copyright (c) 2010 Rob Halff, released under the MIT license

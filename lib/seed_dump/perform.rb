@@ -32,6 +32,7 @@ module SeedDump
       @opts['models']  = @opts['models'].split(',').collect {|x| x.underscore.singularize.camelize }
       @opts['schema']  = env['PG_SCHEMA']
       @opts['model_dir']  = env['MODEL_DIR'] || @model_dir
+      @opts['max-combined'] = env['MAX_COMBINED']
     end
 
     def loadModels
@@ -99,7 +100,15 @@ module SeedDump
         options = ', :without_protection => true '
       end
 
-      "\n#{model}.create([\n" << rows.join(",\n") << "\n]#{options})\n"
+      if @opts['max-combined']
+        combined = ""
+        rows.each_slice(@opts['max-combined'].to_i) do |slice|
+          combined += "\n#{model}.create([\n" << slice.join(",\n") << "\n]#{options})\n"
+        end
+        combined
+      else
+        "\n#{model}.create([\n" << rows.join(",\n") << "\n]#{options})\n"
+      end
     end
 
     def dumpModels
